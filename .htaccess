@@ -1,0 +1,50 @@
+RewriteEngine On
+RewriteBase /r-management/
+ErrorDocument 404 /r-management/404.php
+
+# Redirect old restro page URLs to the new restaurant page URL.
+RewriteRule ^(?:frontend/)?restro(?:\.php)?/?$ /r-management/restaurant [R=302,L,NC,QSA]
+
+# Redirect old frontend URLs to clean root URLs
+RewriteCond %{THE_REQUEST} \s/+r-management/frontend/?(?:\s|\?) [NC]
+RewriteRule ^frontend/?$ /r-management/ [R=302,L,NC]
+RewriteCond %{THE_REQUEST} \s/+r-management/frontend/([^\s?]+?)\.php(?:\s|\?) [NC]
+RewriteRule ^frontend/(.+)\.php$ /r-management/$1 [R=302,L,NC,QSA]
+
+# Redirect frontend root .php URLs to extensionless URLs
+RewriteCond %{THE_REQUEST} \s/+r-management/index\.php(?:\s|\?) [NC]
+RewriteRule ^index\.php$ /r-management/ [R=302,L,NC]
+RewriteCond %{THE_REQUEST} \s/+r-management/([^/\s?]+)\.php(?:\s|\?) [NC]
+RewriteCond %{DOCUMENT_ROOT}/r-management/frontend/%1.php -f
+RewriteRule ^([^/]+)\.php$ /r-management/$1 [R=302,L,NC,QSA]
+
+# Redirect panel .php URLs to extensionless URLs
+RewriteCond %{THE_REQUEST} \s/+r-management/(admin|restro|delivery-boy)/([^/\s?]+)\.php(?:\s|\?) [NC]
+RewriteCond %{DOCUMENT_ROOT}/r-management/%1/%2.php -f
+RewriteRule ^(admin|restro|delivery-boy)/([^/]+)\.php$ /r-management/$1/$2 [R=302,L,NC,QSA]
+
+# Reject invalid URLs like menu.php/anything or admin/login.php/anything.
+RewriteRule ^.+\.php/.*$ - [R=404,L,NC]
+
+# Serve extensionless panel pages
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/r-management/$1/$2.php -f
+RewriteRule ^(admin|restro|delivery-boy)/([^/]+)/?$ $1/$2.php [L,NC,QSA]
+
+# Do not rewrite requests that are already targeting a real project area.
+RewriteCond %{REQUEST_URI} ^/r-management/(?:frontend|admin|restro|delivery-boy|database|images)(?:/|$) [NC]
+RewriteRule ^ - [L]
+
+# Keep direct access for existing files/folders in project root (admin, images, etc.)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Serve frontend as main site without showing /frontend in URL
+RewriteRule ^$ frontend/index.php [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/r-management/frontend/$1.php -f
+RewriteRule ^([^/]+)/?$ frontend/$1.php [L,NC,QSA]
+RewriteRule ^(.+)$ frontend/$1 [L]

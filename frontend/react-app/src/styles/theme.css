@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Pacifico&display=swap');
+
+:root {
+  /* HSL Color System */
+  --primary-hue: 38;
+  --primary-sat: 100%;
+  --primary-light: 45%; /* #e69500 */
+  --site-primary: hsl(var(--primary-hue), var(--primary-sat), var(--primary-light));
+  --site-primary-hover: hsl(var(--primary-hue), var(--primary-sat), 40%);
+  
+  --bg-dark: #0f172a;
+  --bg-light: #f8fafc;
+  --card-dark: #1e293b;
+  --card-light: #ffffff;
+  
+  --site-text-dark: #f8fafc;
+  --site-text-light: #0f172a;
+  --site-text-muted-dark: #94a3b8;
+  --site-text-muted-light: #64748b;
+  
+  /* Current default mode is light, but layout has sections with dark background */
+  --site-bg: var(--bg-light);
+  --site-surface: var(--card-light);
+  --site-text: var(--site-text-light);
+  --site-muted: var(--site-text-muted-light);
+  --site-border: rgba(148, 163, 184, 0.12);
+  --site-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 4px 12px -5px rgba(0, 0, 0, 0.02);
+}
+
+body.dark {
+  --site-bg: var(--bg-dark);
+  --site-surface: var(--card-dark);
+  --site-text: var(--site-text-dark);
+  --site-muted: var(--site-text-muted-dark);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--site-bg);
+  color: var(--site-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
