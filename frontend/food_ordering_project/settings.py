@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import pymysql
+import dj_database_url
 
 # Integrate PyMySQL as MySQLdb
 pymysql.install_as_MySQLdb()
@@ -24,9 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-zu2em%x$i*+k-u0_2em)n)8tal0lo6kzdv3c%d88%c@e(-8821'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+
+ALLOWED_HOSTS = [
+    ".onrender.com",
+]
 
 # Application definition
 
@@ -54,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'food_ordering_project.middleware.JSONResponseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'food_ordering_project.urls'
@@ -78,14 +83,9 @@ WSGI_APPLICATION = 'food_ordering_project.wsgi.application'
 
 # Database Settings for MySQL
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'f_management',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
+    "default": dj_database_url.config(
+        conn_max_age=600
+    )
 }
 
 # Password validation
@@ -133,3 +133,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Google Maps API Key
 GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY', 'AIzaSyDYSBlQ9HF7MqndLVihj3QTJKh6tHbBOUQ')
 
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
