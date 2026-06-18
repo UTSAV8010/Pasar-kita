@@ -1,13 +1,14 @@
-
 import os
 from pathlib import Path
 import pymysql
 import dj_database_url
 
-# pyrefly: ignore [missing-import]
 from dotenv import load_dotenv
 
+# Create BASE_DIR FIRST
+BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load .env AFTER BASE_DIR exists
 load_dotenv(BASE_DIR / ".env", override=True)
 
 # Integrate PyMySQL as MySQLdb
