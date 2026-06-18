@@ -27,9 +27,9 @@ SECRET_KEY = 'django-insecure-zu2em%x$i*+k-u0_2em)n)8tal0lo6kzdv3c%d88%c@e(-8821
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-
 ALLOWED_HOSTS = [
-    ".onrender.com",
+    "pasar-kita.onrender.com",
+    "*"
 ]
 
 # Application definition
@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'food_ordering_project.middleware.CORSMiddleware',
     'food_ordering_project.middleware.ReactSPAMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -58,7 +59,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'food_ordering_project.middleware.JSONResponseMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'food_ordering_project.urls'
@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'food_ordering_project.wsgi.application'
 # Database Settings for MySQL
 DATABASES = {
     "default": dj_database_url.config(
-        conn_max_age=600
+        default=os.getenv("DATABASE_URL")
     )
 }
 
@@ -134,4 +134,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY', 'AIzaSyDYSBlQ9HF7MqndLVihj3QTJKh6tHbBOUQ')
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
