@@ -2,10 +2,16 @@ import os
 from pathlib import Path
 import pymysql
 import dj_database_url
+<<<<<<< HEAD
 
 from dotenv import load_dotenv
 
 # Create BASE_DIR FIRST
+=======
+from dotenv import load_dotenv
+
+# Build paths inside the project
+>>>>>>> 8bc9ab03683f810833515351e623e8a10a7e6cd4
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load .env AFTER BASE_DIR exists
