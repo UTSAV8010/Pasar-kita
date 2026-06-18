@@ -3,10 +3,12 @@
 echo "Installing Python packages..."
 pip install -r requirements.txt
 
-echo "Building React frontend..."
+echo "Installing Node packages..."
 cd react-app
 
 npm install
+
+echo "Building React..."
 npm run build
 
 cd ..
@@ -14,7 +16,7 @@ cd ..
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
 
-echo "Running database migrations..."
+echo "Running migrations..."
 python manage.py migrate
 
-echo "Build completed successfully!"
+echo "Build complete."
