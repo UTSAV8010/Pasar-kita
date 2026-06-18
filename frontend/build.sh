@@ -11,13 +11,10 @@ npm run build
 
 cd ..
 
-echo "Checking React build..."
-ls -la react-app/dist || true
-
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
 
 echo "Running database migrations..."
-python manage.py migrate --noinput
+python manage.py migrate
 
 echo "Build completed successfully!"
