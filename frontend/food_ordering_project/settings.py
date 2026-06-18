@@ -1,7 +1,14 @@
+
 import os
 from pathlib import Path
 import pymysql
 import dj_database_url
+
+# pyrefly: ignore [missing-import]
+from dotenv import load_dotenv
+
+
+load_dotenv(BASE_DIR / ".env", override=True)
 
 # Integrate PyMySQL as MySQLdb
 pymysql.install_as_MySQLdb()
@@ -22,7 +29,7 @@ DatabaseFeatures.can_return_rows_from_bulk_insert = False
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-zu2em%x$i*+k-u0_2em)n)8tal0lo6kzdv3c%d88%c@e(-8821'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -84,7 +91,9 @@ WSGI_APPLICATION = 'food_ordering_project.wsgi.application'
 # Database Settings for MySQL
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL")
+        default=os.getenv("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=True,
     )
 }
 
