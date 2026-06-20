@@ -10,3 +10,4 @@ cd ..
 
 python manage.py collectstatic --noinput
 python manage.py migrate
+python db_init.py
