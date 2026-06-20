@@ -331,5 +331,55 @@ def initialize_database():
         
         print("--- Database initialization completed successfully ---")
 
+import shutil
+
+def align_images():
+    print("--- Starting category and food image alignment ---")
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    images_dir = os.path.join(base_dir, 'images')
+    
+    src_pizza = os.path.join(images_dir, 'pizza.jpg')
+    src_burger = os.path.join(images_dir, 'burger.jpg')
+    
+    dest_cat_pizza = os.path.join(images_dir, 'category', 'pizza.jpg')
+    dest_cat_burger = os.path.join(images_dir, 'category', 'burger.jpg')
+    
+    dest_food_pizza = os.path.join(images_dir, 'food', 'pizza.jpg')
+    dest_food_burger = os.path.join(images_dir, 'food', 'burger.jpg')
+    
+    # Ensure destination directories exist
+    os.makedirs(os.path.dirname(dest_cat_pizza), exist_ok=True)
+    os.makedirs(os.path.dirname(dest_food_pizza), exist_ok=True)
+    
+    # Copy pizza image
+    if os.path.exists(src_pizza):
+        shutil.copy(src_pizza, dest_cat_pizza)
+        shutil.copy(src_pizza, dest_food_pizza)
+        print("Copied pizza images successfully.")
+    else:
+        print(f"Warning: Source pizza image not found at {src_pizza}")
+        
+    # Copy burger image
+    if os.path.exists(src_burger):
+        shutil.copy(src_burger, dest_cat_burger)
+        shutil.copy(src_burger, dest_food_burger)
+        print("Copied burger images successfully.")
+    else:
+        print(f"Warning: Source burger image not found at {src_burger}")
+        
+    # Update DB references to use these images
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute("UPDATE tbl_category SET image_name = 'pizza.jpg' WHERE id = 1;")
+            cursor.execute("UPDATE tbl_category SET image_name = 'burger.jpg' WHERE id = 2;")
+            cursor.execute("UPDATE tbl_food SET image_name = 'pizza.jpg' WHERE id = 1;")
+            cursor.execute("UPDATE tbl_food SET image_name = 'burger.jpg' WHERE id = 2;")
+            cursor.execute("UPDATE tbl_food SET image_name = 'pizza.jpg' WHERE id = 3;")
+            print("Successfully updated database image references.")
+        except Exception as e:
+            print(f"Error updating database image references: {e}")
+    print("--- Image alignment completed ---")
+
 if __name__ == '__main__':
     initialize_database()
+    align_images()
