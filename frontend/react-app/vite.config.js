@@ -7,17 +7,20 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// Auto-spawn Django backend server
-console.log('--- Starting Django Backend Server ---')
-const djangoProcess = spawn('python', ['manage.py', 'runserver', '8000'], {
-  cwd: path.resolve(__dirname, '..'),
-  stdio: 'inherit',
-  shell: true
-})
+// Auto-spawn Django backend server only in development
+const isBuild = process.argv.includes('build') || process.env.NODE_ENV === 'production';
+if (!isBuild) {
+  console.log('--- Starting Django Backend Server ---')
+  const djangoProcess = spawn('python', ['manage.py', 'runserver', '8000'], {
+    cwd: path.resolve(__dirname, '..'),
+    stdio: 'inherit',
+    shell: true
+  })
 
-djangoProcess.on('error', (err) => {
-  console.error('Failed to start Django process:', err)
-})
+  djangoProcess.on('error', (err) => {
+    console.error('Failed to start Django process:', err)
+  })
+}
 
 // https://vite.dev/config/
 export default defineConfig({
