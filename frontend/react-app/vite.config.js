@@ -11,7 +11,8 @@ const __dirname = path.dirname(__filename)
 const isBuild = process.argv.includes('build') || process.env.NODE_ENV === 'production';
 if (!isBuild) {
   console.log('--- Starting Django Backend Server ---')
-  const djangoProcess = spawn('python', ['manage.py', 'runserver', '8000'], {
+  const pythonCmd = process.platform === 'win32' ? 'py' : 'python';
+  const djangoProcess = spawn(pythonCmd, ['manage.py', 'runserver', '8000'], {
     cwd: path.resolve(__dirname, '..'),
     stdio: 'inherit',
     shell: true
