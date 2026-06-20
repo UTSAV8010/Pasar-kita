@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: pasar-kita
+    runtime: python
+    buildCommand: sed -i 's/\r$//' build.sh && chmod +x build.sh && ./build.sh
+    startCommand: gunicorn food_ordering_project.wsgi:application
+    rootDir: frontend
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://paser_kita_user:Uop6CAzS70boB2ABl3u6ikI3ZDqETFg5@dpg-d8pneshkh4rs739dpc7g-a/paser_kita
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
+      - key: EMAIL_HOST_USER
+        value: utsavsarvaliya27@gmail.com
+      - key: EMAIL_HOST_PASSWORD
+        value: vedmjmfeekiwpdmw
+      - key: DEFAULT_FROM_EMAIL
+        value: Pasar-kita <utsavsarvaliya27@gmail.com>

@@ -27,14 +27,12 @@ DatabaseFeatures.can_return_rows_from_bulk_insert = False
 
 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
     "pasar-kita.onrender.com",
@@ -90,12 +88,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'food_ordering_project.wsgi.application'
 
-# Database Settings for MySQL
+# Database Settings
+DATABASE_URL_VAL = os.getenv("DATABASE_URL", "")
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL"),
+        default=DATABASE_URL_VAL if DATABASE_URL_VAL else f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
         conn_max_age=600,
-        ssl_require=True,
+        ssl_require=False if '127.0.0.1' in DATABASE_URL_VAL or 'localhost' in DATABASE_URL_VAL or not DATABASE_URL_VAL else True,
     )
 }
 
@@ -132,12 +131,12 @@ MEDIA_ROOT = BASE_DIR.parent / 'images'
 
 # Email / SMTP configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'utsavsarvaliya27@gmail.com'
-EMAIL_HOST_PASSWORD = 'vedmjmfeekiwpdmw'
-DEFAULT_FROM_EMAIL = 'Pasar-kita <utsavsarvaliya27@gmail.com>'
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'utsavsarvaliya27@gmail.com')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'vedmjmfeekiwpdmw')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'Pasar-kita <utsavsarvaliya27@gmail.com>')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

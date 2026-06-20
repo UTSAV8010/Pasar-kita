@@ -106,10 +106,15 @@ urlpatterns = [
     path('cmd-run/', views.cmd_run),
 ]
 
-# Append media serving URL routing
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static('/uploads/', document_root=str(settings.BASE_DIR.parent / 'restro' / 'uploads'))
-    urlpatterns += static('/restro/uploads/', document_root=str(settings.BASE_DIR.parent / 'restro' / 'uploads'))
-    urlpatterns += static('/delivery-boy/uploads/', document_root=str(settings.BASE_DIR.parent / 'delivery-boy' / 'uploads'))
-    urlpatterns += static('/assets/', document_root=str(settings.BASE_DIR / 'react-app' / 'dist' / 'assets'))
+# Serve static/media files in development and production (Render)
+from django.views.static import serve
+from django.urls import re_path
+
+urlpatterns += [
+    re_path(r'^images/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^uploads/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR.parent / 'restro' / 'uploads')}),
+    re_path(r'^restro/uploads/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR.parent / 'restro' / 'uploads')}),
+    re_path(r'^delivery-boy/uploads/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR.parent / 'delivery-boy' / 'uploads')}),
+    re_path(r'^assets/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR / 'react-app' / 'dist' / 'assets')}),
+]
+
