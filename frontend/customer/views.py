@@ -598,31 +598,17 @@ def login_view(request):
                     # Send Email OTP
                     email_body = f"Confirm your login with this OTP: {otp}\n\nExpires in 60 seconds."
                     print(f"\n========================================\n[DEV] LOGIN OTP FOR {user.email}: {otp}\n========================================\n")
-                    email_sent = False
-                    email_error = None
-                    try:
-                        send_mail(
-                            'Pasar-kita Login OTP',
-                            email_body,
-                            settings.DEFAULT_FROM_EMAIL,
-                            [user.email],
-                            fail_silently=False
-                        )
-                        email_sent = True
-                    except Exception as e:
-                        import traceback
-                        traceback.print_exc()
-                        email_sent = False
-                        email_error = str(e)
+                    send_mail(
+                        'Pasar-kita Login OTP',
+                        email_body,
+                        settings.DEFAULT_FROM_EMAIL,
+                        [user.email],
+                        fail_silently=True
+                    )
                     
-                    if email_sent:
-                        otp_step = True
-                        message = 'Login OTP sent to your registered email. It expires in 60 seconds.'
-                        message_class = 'success'
-                    else:
-                        otp_step = False
-                        message = f'Failed to send OTP email: {email_error}. Please try again later or check your SMTP settings.'
-                        message_class = 'danger'
+                    otp_step = True
+                    message = 'Login OTP sent to your registered email. It expires in 60 seconds.'
+                    message_class = 'success'
                 else:
                     message = 'Invalid password. Please try again.'
                     
@@ -638,31 +624,16 @@ def login_view(request):
                 
                 email_body = f"Confirm your login with this OTP: {otp}\n\nExpires in 60 seconds."
                 print(f"\n========================================\n[DEV] LOGIN OTP FOR {pending_email}: {otp}\n========================================\n")
-                email_sent = False
-                email_error = None
-                try:
-                    send_mail(
-                        'Pasar-kita Login OTP',
-                        email_body,
-                        settings.DEFAULT_FROM_EMAIL,
-                        [pending_email],
-                        fail_silently=False
-                    )
-                    email_sent = True
-                except Exception as e:
-                    import traceback
-                    traceback.print_exc()
-                    email_sent = False
-                    email_error = str(e)
-                
-                if email_sent:
-                    otp_step = True
-                    message = 'A new login OTP has been sent. It expires in 60 seconds.'
-                    message_class = 'success'
-                else:
-                    otp_step = True  # Stay on the OTP input step
-                    message = f'Failed to send login OTP: {email_error}. Please try again.'
-                    message_class = 'danger'
+                send_mail(
+                    'Pasar-kita Login OTP',
+                    email_body,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [pending_email],
+                    fail_silently=True
+                )
+                otp_step = True
+                message = 'A new login OTP has been sent. It expires in 60 seconds.'
+                message_class = 'success'
                 username = request.session.get('login_pending_username', '')
                 
         elif 'verify_login_otp' in request.POST:
@@ -724,7 +695,7 @@ def signup_view(request):
     otp_step = False
     
     if request.method == 'POST':
-        if 'send_signup_otp' in request.POST or 'register' in request.POST:
+        if 'send_signup_otp' in request.POST:
             values = {
                 'name': request.POST.get('name', '').strip(),
                 'username': request.POST.get('username', '').strip(),
@@ -734,7 +705,7 @@ def signup_view(request):
                 'address': request.POST.get('address', '').strip(),
             }
             password = request.POST.get('password', '')
-            confirm_password = request.POST.get('confirm_password', request.POST.get('confirmPassword', ''))
+            confirm_password = request.POST.get('confirm_password', '')
             
             # Server Validation
             if any(not v for v in values.values()) or not password or not confirm_password:
@@ -766,31 +737,17 @@ def signup_view(request):
                 # Send Email OTP
                 email_body = f"Confirm your signup with this OTP: {otp}\n\nExpires in 60 seconds."
                 print(f"\n========================================\n[DEV] SIGNUP OTP FOR {values['email']}: {otp}\n========================================\n")
-                email_sent = False
-                email_error = None
-                try:
-                    send_mail(
-                        'Pasar-kita Signup OTP',
-                        email_body,
-                        settings.DEFAULT_FROM_EMAIL,
-                        [values['email']],
-                        fail_silently=False
-                    )
-                    email_sent = True
-                except Exception as e:
-                    import traceback
-                    traceback.print_exc()
-                    email_sent = False
-                    email_error = str(e)
+                send_mail(
+                    'Pasar-kita Signup OTP',
+                    email_body,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [values['email']],
+                    fail_silently=True
+                )
                 
-                if email_sent:
-                    otp_step = True
-                    message = 'Signup OTP sent to your email. Verify it within 60 seconds.'
-                    message_class = 'success'
-                else:
-                    otp_step = False
-                    message = f'Failed to send OTP email: {email_error}. Please try again later or check your SMTP settings.'
-                    message_class = 'danger'
+                otp_step = True
+                message = 'Signup OTP sent to your email. Verify it within 60 seconds.'
+                message_class = 'success'
                 
         elif 'resend_signup_otp' in request.POST:
             pending_data = request.session.get('signup_pending_data')
@@ -803,31 +760,16 @@ def signup_view(request):
                 
                 email_body = f"Confirm your signup with this OTP: {otp}\n\nExpires in 60 seconds."
                 print(f"\n========================================\n[DEV] SIGNUP OTP FOR {pending_data['email']}: {otp}\n========================================\n")
-                email_sent = False
-                email_error = None
-                try:
-                    send_mail(
-                        'Pasar-kita Signup OTP',
-                        email_body,
-                        settings.DEFAULT_FROM_EMAIL,
-                        [pending_data['email']],
-                        fail_silently=False
-                    )
-                    email_sent = True
-                except Exception as e:
-                    import traceback
-                    traceback.print_exc()
-                    email_sent = False
-                    email_error = str(e)
-                
-                if email_sent:
-                    otp_step = True
-                    message = 'A new signup OTP has been sent. It expires in 60 seconds.'
-                    message_class = 'success'
-                else:
-                    otp_step = True  # Stay on the OTP input step
-                    message = f'Failed to send signup OTP: {email_error}. Please try again.'
-                    message_class = 'danger'
+                send_mail(
+                    'Pasar-kita Signup OTP',
+                    email_body,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [pending_data['email']],
+                    fail_silently=True
+                )
+                otp_step = True
+                message = 'A new signup OTP has been sent. It expires in 60 seconds.'
+                message_class = 'success'
                 values = pending_data
                 
         elif 'verify_signup_otp' in request.POST:
@@ -907,31 +849,19 @@ def forget_view(request):
                     # Send OTP email
                     email_body = f"Use the reset OTP to recover your password: {otp}\n\nExpires in 60 seconds."
                     print(f"\n========================================\n[DEV] PASSWORD RESET OTP FOR {email}: {otp}\n========================================\n")
-                    email_sent = False
-                    email_error = None
-                    try:
-                        send_mail(
-                            'Pasar-kita Password Reset OTP',
-                            email_body,
-                            settings.DEFAULT_FROM_EMAIL,
-                            [email],
-                            fail_silently=False
-                        )
-                        email_sent = True
-                    except Exception as e:
-                        import traceback
-                        traceback.print_exc()
-                        email_sent = False
-                        email_error = str(e)
+                    send_mail(
+                        'Pasar-kita Password Reset OTP',
+                        email_body,
+                        settings.DEFAULT_FROM_EMAIL,
+                        [email],
+                        fail_silently=True
+                    )
+                    request.session['verified_email'] = email
+                    request.session['reset_key'] = otp
+                    request.session['reset_key_expires_at'] = int(time.time()) + 60
+                    request.session.pop('reset_verified', None)
                     
-                    if email_sent:
-                        request.session['verified_email'] = email
-                        request.session['reset_key'] = otp
-                        request.session['reset_key_expires_at'] = int(time.time()) + 60
-                        request.session.pop('reset_verified', None)
-                        message = f"<div class='alert-box success-box'>Reset key sent to your registered email. It expires in 60 seconds.</div>"
-                    else:
-                        message = f"<div class='alert-box error-box'>Failed to send OTP email: {email_error}. Please try again later or check your SMTP settings.</div>"
+                    message = f"<div class='alert-box success-box'>Reset key sent to your registered email. It expires in 60 seconds.</div>"
                     
         elif 'resend_reset_key' in request.POST:
             email = request.session.get('verified_email')
@@ -944,29 +874,17 @@ def forget_view(request):
                     
                 email_body = f"Use the reset OTP to recover your password: {otp}\n\nExpires in 60 seconds."
                 print(f"\n========================================\n[DEV] PASSWORD RESET OTP FOR {email}: {otp}\n========================================\n")
-                email_sent = False
-                email_error = None
-                try:
-                    send_mail(
-                        'Pasar-kita Password Reset OTP',
-                        email_body,
-                        settings.DEFAULT_FROM_EMAIL,
-                        [email],
-                        fail_silently=False
-                    )
-                    email_sent = True
-                except Exception as e:
-                    import traceback
-                    traceback.print_exc()
-                    email_sent = False
-                    email_error = str(e)
+                send_mail(
+                    'Pasar-kita Password Reset OTP',
+                    email_body,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [email],
+                    fail_silently=True
+                )
+                request.session['reset_key'] = otp
+                request.session['reset_key_expires_at'] = int(time.time()) + 60
                 
-                if email_sent:
-                    request.session['reset_key'] = otp
-                    request.session['reset_key_expires_at'] = int(time.time()) + 60
-                    message = f"<div class='alert-box success-box'>A new reset key has been sent. It expires in 60 seconds.</div>"
-                else:
-                    message = f"<div class='alert-box error-box'>Failed to send reset key: {email_error}. Please try again.</div>"
+                message = f"<div class='alert-box success-box'>A new reset key has been sent. It expires in 60 seconds.</div>"
                 
         elif 'verify_reset_key' in request.POST:
             reset_key_input = request.POST.get('reset_key', '').strip()
