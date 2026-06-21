@@ -110,13 +110,14 @@ def send_password_reset_email(to_email, reset_key, account_label='Admin'):
     msg.send()
 
 # Image helper
-def handle_image_upload(file, prefix='Food-Name-', default=''):
+def handle_image_upload(file, prefix='Food-Name-', default='', subfolder=''):
     if not file:
         return default
     ext = os.path.splitext(file.name)[1]
     filename = f"{prefix}{random.randint(1000, 99999)}{ext}"
+    save_path = os.path.join(subfolder, filename) if subfolder else filename
     fs = FileSystemStorage(location=settings.MEDIA_ROOT)
-    fs.save(filename, file)
+    fs.save(save_path, file)
     return filename
 
 # Global notifications helper
@@ -758,7 +759,7 @@ def add_category(request):
         active = request.POST.get('active', 'No')
         image = request.FILES.get('image')
         
-        image_name = handle_image_upload(image, prefix='Food_Category_')
+        image_name = handle_image_upload(image, prefix='Food_Category_', subfolder='category')
         
         with connection.cursor() as cursor:
             cursor.execute(
@@ -788,7 +789,7 @@ def update_category(request):
         
         image = request.FILES.get('image')
         if image:
-            category.image_name = handle_image_upload(image, prefix='Food_Category_')
+            category.image_name = handle_image_upload(image, prefix='Food_Category_', subfolder='category')
             
         category.save()
         if is_react_request(request):
@@ -846,7 +847,7 @@ def add_food(request):
         stock = request.POST.get('stock', 0)
         image = request.FILES.get('image')
         
-        image_name = handle_image_upload(image, prefix='Food-Name-')
+        image_name = handle_image_upload(image, prefix='Food-Name-', subfolder='food')
         
         with connection.cursor() as cursor:
             cursor.execute(
@@ -882,7 +883,7 @@ def update_food(request):
         
         image = request.FILES.get('image')
         if image:
-            food.image_name = handle_image_upload(image, prefix='Food-Name-')
+            food.image_name = handle_image_upload(image, prefix='Food-Name-', subfolder='food')
             
         food.save()
         if is_react_request(request):
@@ -1270,6 +1271,13 @@ def update_restro_category(request):
     if status == 'approved':
         exists = Category.objects.filter(title=not_approved_cat.title).exists()
         if not exists:
+            if not_approved_cat.image_name:
+                src_path = settings.BASE_DIR.parent / 'restro' / 'uploads' / 'category' / not_approved_cat.image_name
+                dst_path = settings.MEDIA_ROOT / 'category' / not_approved_cat.image_name
+                if os.path.exists(src_path):
+                    import shutil
+                    os.makedirs(os.path.dirname(dst_path), exist_ok=True)
+                    shutil.copy2(src_path, dst_path)
             with connection.cursor() as cursor:
                 cursor.execute(
                     "INSERT INTO tbl_category (title, image_name, featured, active) VALUES (%s, %s, %s, %s)",
@@ -1310,6 +1318,13 @@ def update_restro_food(request):
     vendor_food.save()
     
     if status == 'approved':
+        if vendor_food.image_name:
+            src_path = settings.BASE_DIR.parent / 'restro' / 'uploads' / 'food' / vendor_food.image_name
+            dst_path = settings.MEDIA_ROOT / 'food' / vendor_food.image_name
+            if os.path.exists(src_path):
+                import shutil
+                os.makedirs(os.path.dirname(dst_path), exist_ok=True)
+                shutil.copy2(src_path, dst_path)
         with connection.cursor() as cursor:
             cursor.execute(
                 "INSERT INTO tbl_food (title, description, price, restro_name, image_name, category_id, featured, active, stock) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
