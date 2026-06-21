@@ -112,6 +112,10 @@ from django.urls import re_path
 
 urlpatterns += [
     re_path(r'^images/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^restro-img/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR.parent / 'restro' / 'uploads' / 'restro-img')}),
+    re_path(r'^licence/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR.parent / 'restro' / 'uploads' / 'licence')}),
+    re_path(r'^restro/restro-img/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR.parent / 'restro' / 'uploads' / 'restro-img')}),
+    re_path(r'^uploads/uploads/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR.parent / 'delivery-boy' / 'uploads')}),
     re_path(r'^uploads/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR.parent / 'restro' / 'uploads')}),
     re_path(r'^static/uploads/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR.parent / 'restro' / 'uploads')}),
     re_path(r'^restro/uploads/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR.parent / 'restro' / 'uploads')}),

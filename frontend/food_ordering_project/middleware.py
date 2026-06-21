@@ -39,7 +39,10 @@ class JSONResponseMiddleware:
             path.startswith('/django-admin/') or
             path.startswith('/uploads/') or
             path.startswith('/restro/uploads/') or
-            path.startswith('/delivery-boy/uploads/')
+            path.startswith('/delivery-boy/uploads/') or
+            path.startswith('/restro-img/') or
+            path.startswith('/licence/') or
+            path.startswith('/restro/restro-img/')
         )
         
         response = self.get_response(request)
@@ -78,7 +81,10 @@ class ReactSPAMiddleware:
             path.startswith('/django-admin/') or
             path.startswith('/uploads/') or
             path.startswith('/restro/uploads/') or
-            path.startswith('/delivery-boy/uploads/')
+            path.startswith('/delivery-boy/uploads/') or
+            path.startswith('/restro-img/') or
+            path.startswith('/licence/') or
+            path.startswith('/restro/restro-img/')
         )
         
         accept_header = request.headers.get('Accept', '')
