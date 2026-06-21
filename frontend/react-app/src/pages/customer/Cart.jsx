@@ -346,8 +346,8 @@ export default function Cart() {
               <div className="info-box" style={{ background: '#f8fafc', padding: '14px', borderRadius: '12px', borderLeft: '4px solid #10b981' }}>
                 <h6 style={{ fontWeight: 800, fontSize: '0.9rem', marginBottom: '8px' }}>Pin Delivery Location</h6>
                 <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
-                  <button type="button" onClick={handleUseMyLocation} style={{ flex: 1, padding: '8px', border: '1px solid #cbd5e1', borderRadius: '8px', background: '#fff', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}><MapPin size={12} /> Use GPS</button>
-                  <button type="button" onClick={handleSimulateMapClick} style={{ flex: 1, padding: '8px', border: '1px solid #cbd5e1', borderRadius: '8px', background: '#fff', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}><MapPin size={12} /> Click Map</button>
+                  <button type="button" onClick={handleUseMyLocation} style={{ flex: 1, padding: '8px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}><MapPin size={12} /> Use GPS</button>
+                  <button type="button" onClick={handleSimulateMapClick} style={{ flex: 1, padding: '8px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}><MapPin size={12} /> Click Map</button>
                 </div>
                 
                 {/* Real OpenStreetMap embed */}
