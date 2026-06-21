@@ -724,7 +724,7 @@ def signup_view(request):
     otp_step = False
     
     if request.method == 'POST':
-        if 'send_signup_otp' in request.POST:
+        if 'send_signup_otp' in request.POST or 'register' in request.POST:
             values = {
                 'name': request.POST.get('name', '').strip(),
                 'username': request.POST.get('username', '').strip(),
@@ -734,7 +734,7 @@ def signup_view(request):
                 'address': request.POST.get('address', '').strip(),
             }
             password = request.POST.get('password', '')
-            confirm_password = request.POST.get('confirm_password', '')
+            confirm_password = request.POST.get('confirm_password', request.POST.get('confirmPassword', ''))
             
             # Server Validation
             if any(not v for v in values.values()) or not password or not confirm_password:
