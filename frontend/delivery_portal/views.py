@@ -67,6 +67,7 @@ def send_delivery_reset_email(to_email, reset_key):
     from django.utils.html import escape
 
     subject = 'Pasar-kita Delivery Reset OTP'
+    print(f"\n========================================\n[DEV] DELIVERY RESET OTP FOR {to_email}: {reset_key}\n========================================\n")
     text_content = (
         f"Your Delivery portal reset code is ready\n\n"
         f"Use the OTP below to continue your password reset.\n\n"

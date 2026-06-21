@@ -69,6 +69,7 @@ def send_password_reset_email(to_email, reset_key, account_label='Restaurant'):
     from django.utils.html import escape
     
     subject = f'Pasar-kita {account_label} Reset OTP'
+    print(f"\n========================================\n[DEV] {account_label.upper()} RESET OTP FOR {to_email}: {reset_key}\n========================================\n")
     text_content = f"Your {account_label} reset code is ready\n\nUse the OTP below to continue your password reset. Your password will not change until this code is verified.\n\nYour 6-digit OTP: {reset_key}\n\nEnter the code exactly as shown within 60 seconds. Never share it with anyone.\n\nIgnore this email and your password will stay unchanged.\n"
     
     html_content = f"""

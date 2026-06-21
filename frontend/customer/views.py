@@ -597,6 +597,7 @@ def login_view(request):
                     
                     # Send Email OTP
                     email_body = f"Confirm your login with this OTP: {otp}\n\nExpires in 60 seconds."
+                    print(f"\n========================================\n[DEV] LOGIN OTP FOR {user.email}: {otp}\n========================================\n")
                     send_mail(
                         'Pasar-kita Login OTP',
                         email_body,
@@ -622,6 +623,7 @@ def login_view(request):
                 request.session['login_pending_otp_expires_at'] = int(time.time()) + 60
                 
                 email_body = f"Confirm your login with this OTP: {otp}\n\nExpires in 60 seconds."
+                print(f"\n========================================\n[DEV] LOGIN OTP FOR {pending_email}: {otp}\n========================================\n")
                 send_mail(
                     'Pasar-kita Login OTP',
                     email_body,
@@ -734,6 +736,7 @@ def signup_view(request):
                 
                 # Send Email OTP
                 email_body = f"Confirm your signup with this OTP: {otp}\n\nExpires in 60 seconds."
+                print(f"\n========================================\n[DEV] SIGNUP OTP FOR {values['email']}: {otp}\n========================================\n")
                 send_mail(
                     'Pasar-kita Signup OTP',
                     email_body,
@@ -756,6 +759,7 @@ def signup_view(request):
                 request.session['signup_pending_otp_expires_at'] = int(time.time()) + 60
                 
                 email_body = f"Confirm your signup with this OTP: {otp}\n\nExpires in 60 seconds."
+                print(f"\n========================================\n[DEV] SIGNUP OTP FOR {pending_data['email']}: {otp}\n========================================\n")
                 send_mail(
                     'Pasar-kita Signup OTP',
                     email_body,
@@ -844,6 +848,7 @@ def forget_view(request):
                         
                     # Send OTP email
                     email_body = f"Use the reset OTP to recover your password: {otp}\n\nExpires in 60 seconds."
+                    print(f"\n========================================\n[DEV] PASSWORD RESET OTP FOR {email}: {otp}\n========================================\n")
                     send_mail(
                         'Pasar-kita Password Reset OTP',
                         email_body,
@@ -868,6 +873,7 @@ def forget_view(request):
                     cursor.execute("UPDATE tbl_users SET reset_key = %s WHERE email = %s", [otp, email])
                     
                 email_body = f"Use the reset OTP to recover your password: {otp}\n\nExpires in 60 seconds."
+                print(f"\n========================================\n[DEV] PASSWORD RESET OTP FOR {email}: {otp}\n========================================\n")
                 send_mail(
                     'Pasar-kita Password Reset OTP',
                     email_body,
